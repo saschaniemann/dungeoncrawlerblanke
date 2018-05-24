@@ -19,6 +19,7 @@ public class WaterQuest : MonoBehaviour {
 	private Inventory inventory;
 	private PlayerController playerController;
 	private EPController epController;
+	private AnimateDoor door;
 
 	void Start () {
 		//finalBucket.SetActive(false);
@@ -31,6 +32,8 @@ public class WaterQuest : MonoBehaviour {
 			GetComponent<Text>();	//uGUI
 		epController = GameObject.FindGameObjectWithTag("GameController").
 			GetComponent<EPController>();
+		door = GameObject.FindGameObjectWithTag("OpenDoor").
+			GetComponentInChildren<AnimateDoor>();
 
 	}
 	
@@ -48,9 +51,9 @@ public class WaterQuest : MonoBehaviour {
 				//rot.eulerAngles = new Vector3(-90,0,0);
 				Instantiate(bucketInventoryItem.prefab,player.transform.position + player.transform.forward + player.transform.up,Quaternion.identity);
 
-				playerController.gameEnded = true;
 				messageText.text = questEndedMessage;
 				epController.AddPoints (eps);
+				door.isLocked = false;
 			}
 			else
 			{
