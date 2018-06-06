@@ -29,7 +29,7 @@ public class StoneBehaviour : MonoBehaviour
 		//if ((acceptableLayers.value & 1 << other.gameObject.layer) == 1 << other.gameObject.layer)
 		if ((acceptableLayers.value & 1 << other.gameObject.layer) == 1 << other.gameObject.layer)
 		{
-			if (other.gameObject.CompareTag("Enemy"))
+			if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Zombie"))
 			{
 				other.gameObject.SendMessage (
 					"ApplyDamage",damage,SendMessageOptions.DontRequireReceiver);						

@@ -1,28 +1,67 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class EnemyHealth : HealthController {
 	public bool isShocked = false;
 	public float shockedTime = 0.5F;
 	public int eps = 1;
-	private EnemySonar enemySonar;
+    public Image healthGui;
+    public Image healthGuiMain;
+    private float maxHealth;
+    private EnemySonar enemySonar;
 	private EPController epController;
 	private Animator anim;
 	private int hitTrigger;
 	private int dieBool;
 	private AudioSource audioSource;
+
 	void Start()
 	{
 		enemySonar = GetComponent<EnemySonar>();
 		epController = GameObject.FindGameObjectWithTag("GameController").
 			GetComponent<EPController>();
-		hitTrigger = Animator.StringToHash ("Hit");
+        hitTrigger = Animator.StringToHash ("Hit");
 		dieBool = Animator.StringToHash ("Die");
 		anim = transform.GetComponent<Animator>();
 		audioSource = GetComponent<AudioSource>();
+        maxHealth = health;
 	}
 
-	public override void Damaging ()
+    void UpdateView()
+    {
+        if (healthGui != null)
+        {
+            healthGui.fillAmount = health / maxHealth;
+        }
+     }
+
+    void OnMouseEnter()
+    {
+        //healthGuiMain.renderer.enable = true;
+        healthGui.enabled = true;
+        healthGuiMain.enabled = true;
+        InvokeRepeating("UpdateView", 0.0f, 0.3f);
+        Vector3 pos;
+        pos.x = Input.mousePosition.x;
+        pos.y = Input.mousePosition.y + 20;
+        pos.z = 0;
+        healthGuiMain.rectTransform.position = pos;
+        healthGui.rectTransform.position = pos;
+    }
+
+    void OnMouseExit()
+    {
+        CancelInvoke("UpdateView");
+        CloseHealthBar();
+    }
+
+    void CloseHealthBar()
+    {
+        healthGui.enabled = false;
+        healthGuiMain.enabled = false;
+    }
+    public override void Damaging ()
 	{	
 		anim.SetTrigger(hitTrigger);
 		audioSource.Play ();
@@ -36,11 +75,14 @@ public class EnemyHealth : HealthController {
 
 	public override void Dying ()
 	{
-		anim.SetBool(dieBool,true);
+        anim.speed = 1;
+        anim.SetBool(dieBool,true);
 		anim.SetTrigger(hitTrigger);
 		audioSource.Play ();
-		isShocked = true;	
-		Invoke ("DestroyMe",1);
+        CancelInvoke("UpdateView");
+        CloseHealthBar();
+        isShocked = true;
+        Invoke ("DestroyMe",1);
 	}
 
 	void ResetShocked()
@@ -53,5 +95,6 @@ public class EnemyHealth : HealthController {
 		Destroy(gameObject);
 		epController.AddPoints (eps);
 	}
+
 
 }

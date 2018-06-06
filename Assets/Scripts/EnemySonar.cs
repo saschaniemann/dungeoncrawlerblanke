@@ -18,7 +18,7 @@ public class EnemySonar : MonoBehaviour {
 		Ray ray = new Ray(transform.position,direction.normalized);
 		RaycastHit hit;
 		if (Physics.Raycast(ray,out hit,5))
-		{
+		{ 
 			if(hit.collider.gameObject == player)
 			{
 				Vector3 dir = hit.transform.position - transform.position;

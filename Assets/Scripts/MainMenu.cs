@@ -56,12 +56,13 @@ public class MainMenu : MonoBehaviour {
 	public void ShowInfo()
 	{
 
-		messageText.text = "Deine Steuerung:\n\n" +
-				"A/D: Links/Rechts gehen\n" +
-				"W/S: Vorwärts/Rückwärts gehen\n" +
-				"Q/E: Links/Rechts drehen\n" +
-				"Linke Maustaste: Gegenstände aufnehmen\n" +
-				"Rechte Maustaste/Leertaste: Angreifen";
+        messageText.text = "Deine Steuerung:\n\n" +
+                "A/D: Links/Rechts gehen\n" +
+                "W/S: Vorwärts/Rückwärts gehen\n" +
+                "Q/E: Links/Rechts drehen\n" +
+                "Scroll-Rad: Oben/Unten drehen\n" +
+                "Linke Maustaste: Gegenstände aufnehmen/Nahkampf\n" +
+                "Rechte Maustaste/Leertaste: Angreifen";
 	}
 
 	public void CloseGame()

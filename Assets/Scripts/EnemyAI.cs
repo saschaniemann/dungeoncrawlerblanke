@@ -7,8 +7,9 @@ public class EnemyAI : MonoBehaviour {
 	public float attackingSpeed = 4;
 	public Transform[] waypoints; 
 	public float waypointPauseTime = 2;
-
-	private GameObject player;
+    public float animFollowSpeed;
+    
+    private GameObject player;
 	private UnityEngine.AI.NavMeshAgent agent;
 	private Animator anim;
 	private EnemySonar enemySonar;
@@ -17,6 +18,7 @@ public class EnemyAI : MonoBehaviour {
 	private int currentWaypointIndex;
 	private bool readyToHit = true;  
 	private int attackBool;
+    private float animspeed;
 
 	void Start () 
 	{
@@ -27,8 +29,10 @@ public class EnemyAI : MonoBehaviour {
 		enemyHealth = GetComponent<EnemyHealth>();
 		anim = transform.GetComponent<Animator>();
 		attackBool = Animator.StringToHash ("Attack");
+        animspeed = anim.speed;
 
-	}
+
+    }
 
 	void Update () 
 	{
@@ -45,7 +49,8 @@ public class EnemyAI : MonoBehaviour {
 					!enemyHealth.isShocked &&
 					readyToHit)	
 		{
-			agent.speed = attackingSpeed;
+            anim.speed = animFollowSpeed;
+            agent.speed = attackingSpeed;
 			agent.acceleration = 2;
 			agent.SetDestination (player.transform.position);
 			//Unity 5 -B
@@ -91,7 +96,8 @@ public class EnemyAI : MonoBehaviour {
 					if(!enemySonar.playerDetected)		
 						enemySonar.StopSearching();
 
-					other.gameObject.SendMessage (
+                    anim.speed = animspeed;
+                    other.gameObject.SendMessage (
 						"ApplyDamage",damageValue,SendMessageOptions.DontRequireReceiver);
 					StartCoroutine("SetReadyToHit");
 				}
