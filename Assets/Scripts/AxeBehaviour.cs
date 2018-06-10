@@ -7,6 +7,7 @@ public class AxeBehaviour : MonoBehaviour {
     public float maxDistanceToHit;
     public float damage;
     public InventoryItem axe;
+    public float cooldown;
     private GameObject zombie;
     private GameObject player;
     private Inventory inventory;
@@ -42,7 +43,16 @@ public class AxeBehaviour : MonoBehaviour {
     IEnumerator Hit()
     {
         zombie.SendMessage("ApplyDamage", damage, SendMessageOptions.DontRequireReceiver);
-        yield return new WaitForSeconds(2);
+        InvokeRepeating("AxeAnimation", 0, 0.1f);
+        yield return new WaitForSeconds(0.3f);
+        CancelInvoke();
+        player.transform.GetChild(3).transform.Rotate(0, 0, -4*40);
+        yield return new WaitForSeconds(cooldown);
         readyToHit = true;
+    }
+
+    void AxeAnimation()
+    {
+        player.transform.GetChild(3).transform.Rotate(0,0,40);
     }
 }

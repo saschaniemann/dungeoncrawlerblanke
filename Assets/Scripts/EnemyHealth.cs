@@ -15,6 +15,7 @@ public class EnemyHealth : HealthController {
 	private int hitTrigger;
 	private int dieBool;
 	private AudioSource audioSource;
+    private bool dead;
 
 	void Start()
 	{
@@ -27,6 +28,12 @@ public class EnemyHealth : HealthController {
 		audioSource = GetComponent<AudioSource>();
         maxHealth = health;
 	}
+
+    void Update()
+    {
+        if (dead)
+            CloseHealthBar();
+    }
 
     void UpdateView()
     {
@@ -81,6 +88,7 @@ public class EnemyHealth : HealthController {
 		audioSource.Play ();
         CancelInvoke("UpdateView");
         CloseHealthBar();
+        dead = true;
         isShocked = true;
         Invoke ("DestroyMe",1);
 	}
